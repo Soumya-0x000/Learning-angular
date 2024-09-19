@@ -1,0 +1,79 @@
+<div class="flex flex-col items-center justify-center h-full w-full">
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">SignUp</h2>
+        </div>
+
+        <!-- Form with formGroup directive binding -->
+        <form
+            [formGroup]="signupForm"
+            class="space-y-4"
+            (ngSubmit)="signup()"
+            class="w-[20rem] space-y-5"
+        >
+            <!-- name Field -->
+            <div
+                class="form-group"
+                *ngFor="let item of formFields; let i = index"
+                [id]="i"
+            >
+                <label
+                    [for]="item.name"
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    >{{ item.label }}</label
+                >
+                <input
+                    [type]="item.type"
+                    [id]="item.name + i"
+                    [formControlName]="item.name"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    required
+                    [attr.required]="item.validators ? 'required' : ''"
+                />
+
+                <!-- Validation Messages -->
+                <div
+                    *ngIf="
+                        signupForm.get(item.name)?.invalid &&
+                        signupForm.get(item.name)?.touched
+                    "
+                    class="text-red-500 text-xs italic"
+                >
+                    <div
+                        *ngIf="signupForm.get(item.name)?.hasError('required')"
+                    >
+                        {{ item.label }} is required
+                    </div>
+                    <div
+                        *ngIf="signupForm.get(item.name)?.hasError('minlength')"
+                    >
+                        {{ item.label }} must be at least
+                        {{ signupForm.get(item.name)?.errors?.['minlength'].requiredLength }}
+                        characters long
+                    </div>
+                    <div *ngIf="signupForm.get(item.name)?.hasError('email')">
+                        Please enter a valid email address
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button and Forgot Password Link -->
+            <div class="flex items-center justify-between">
+                <button
+                    type="submit"
+                    [disabled]="signupForm.invalid"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
+                    Signup
+                </button>
+                <button
+                    type="reset"
+                    [disabled]="signupForm.invalid"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
