@@ -8,7 +8,6 @@ export const routes: Routes = [
                 (mod) => mod.LoginComponent
             ),
     },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
     {
         path: 'signup',
         loadComponent: () =>
@@ -17,12 +16,13 @@ export const routes: Routes = [
             ),
     },
     {
-        path: 'about',
+        path: 'home',
         loadComponent: () =>
-            import('./components/pages/about-us/about-us.component').then(
-                (mod) => mod.AboutUsComponent
+            import('./components/pages/home/home.component').then(
+                (mod) => mod.HomeComponent
             ),
     },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
         path: '404',
         loadComponent: () =>

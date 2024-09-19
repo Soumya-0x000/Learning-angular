@@ -16,7 +16,7 @@ export class NavbarComponent {
 
     ngOnInit() {
         this.tabs = [
-            { title: 'About', path: '/about' },
+            { title: 'Home', path: '/home' },
             { title: 'SignUp', path: '/signup' },
             { title: 'LogIn', path: '/login' },
         ];
