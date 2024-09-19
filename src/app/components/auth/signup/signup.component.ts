@@ -6,7 +6,7 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { SignupFormType } from '../models/signupType';
+import { SignupFormType } from '../../shared/models/signupType';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 })
 export class SignupComponent implements OnInit {
     constructor(private router: Router) {}
-    
+
     formFields: SignupFormType[] = [];
     signupForm!: FormGroup;
 

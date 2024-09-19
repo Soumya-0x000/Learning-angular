@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
-import {
-    ActivatedRoute,
-    NavigationEnd,
-    Router,
-    RouterOutlet,
-} from '@angular/router';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
 
@@ -26,7 +21,7 @@ export class AppComponent {
         this.router.events
             .pipe(filter((event) => event instanceof NavigationEnd))
             .subscribe((event: any) => {
-                this.showNavbar = event.url !== '/404';
+                this.showNavbar = event?.urlAfterRedirects !== '/404';
             });
     }
 }

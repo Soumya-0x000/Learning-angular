@@ -1,12 +1,34 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { SignupComponent } from './components/signup/signup.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'signup', component: SignupComponent },
+    {
+        path: 'login',
+        loadComponent: () =>
+            import('./components/auth/login/login.component').then(
+                (mod) => mod.LoginComponent
+            ),
+    },
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '404', component: NotFoundComponent },
+    {
+        path: 'signup',
+        loadComponent: () =>
+            import('./components/auth/signup/signup.component').then(
+                (mod) => mod.SignupComponent
+            ),
+    },
+    {
+        path: 'about',
+        loadComponent: () =>
+            import('./components/pages/about-us/about-us.component').then(
+                (mod) => mod.AboutUsComponent
+            ),
+    },
+    {
+        path: '404',
+        loadComponent: () =>
+            import('./components/shared/not-found/not-found.component').then(
+                (mod) => mod.NotFoundComponent
+            ),
+    },
     { path: '**', redirectTo: '/404' },
 ];

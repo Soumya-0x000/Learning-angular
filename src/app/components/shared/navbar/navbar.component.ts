@@ -2,6 +2,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
+import { navbarType } from '../models/navbarType';
 
 @Component({
     selector: 'app-navbar',
@@ -11,10 +12,11 @@ import { RouterLink, RouterModule } from '@angular/router';
     styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-    tabs: { title: string; path: string }[] = [];
+    tabs: navbarType[] = [];
 
     ngOnInit() {
         this.tabs = [
+            { title: 'About', path: '/about' },
             { title: 'SignUp', path: '/signup' },
             { title: 'LogIn', path: '/login' },
         ];
