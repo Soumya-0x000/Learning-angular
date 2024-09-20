@@ -10,6 +10,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
     styleUrl: './login.component.css',
 })
 export class LoginComponent {
+    isPswdVisible: boolean = false;
+    
     email = new FormControl("", [
         Validators.required,
         Validators.email,

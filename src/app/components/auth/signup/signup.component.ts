@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { SignupFormType } from '../../shared/models/signupType';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../service/auth.service';
 
 @Component({
     selector: 'app-signup',
@@ -17,10 +18,11 @@ import { Router } from '@angular/router';
     styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
-    constructor(private router: Router) {}
+    constructor( private authServ: AuthService) {}
 
     formFields: SignupFormType[] = [];
     signupForm!: FormGroup;
+    isPswdVisible: boolean = false;
 
     ngOnInit(): void {
         this.formFields = [
@@ -53,7 +55,9 @@ export class SignupComponent implements OnInit {
     }
 
     signup() {
-        console.log(this.signupForm.value);
-        this.router.navigate(['/login']);
+        this.authServ.registerUser(
+            this.signupForm.value.email,
+            this.signupForm.value.password
+        );
     }
 }

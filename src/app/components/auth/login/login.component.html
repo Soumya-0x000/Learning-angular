@@ -1,13 +1,16 @@
-<div
-    class="flex flex-col items-center justify-center h-full w-full"
->
+<div class="flex flex-col items-center justify-center h-full w-full">
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div class="mb-4">
             <h2 class="text-2xl font-bold text-gray-800">LogIn</h2>
         </div>
 
         <!-- Form with formGroup directive binding -->
-        <form [formGroup]="loginForm" class="space-y-4" (ngSubmit)="login()" class=" w-[20rem] space-y-5">
+        <form
+            [formGroup]="loginForm"
+            class="space-y-4"
+            (ngSubmit)="login()"
+            class="w-[20rem] space-y-5"
+        >
             <!-- Email Field -->
             <div class="form-group">
                 <label
@@ -43,13 +46,26 @@
                     class="block text-gray-700 text-sm font-bold mb-2"
                     >Password</label
                 >
-                <input
-                    type="password"
-                    id="password"
-                    formControlName="password"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                />
+                <div class="relative">
+                    <input
+                        [type]="isPswdVisible ? 'text' : 'password'"
+                        id="password"
+                        formControlName="password"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    />
+                    <div
+                        class="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-sm"
+                        (click)="isPswdVisible = !isPswdVisible"
+                    >
+                        <i
+                            class="pi"
+                            [ngClass]="
+                                isPswdVisible ? 'pi-eye' : 'pi-eye-slash'
+                            "
+                        ></i>
+                    </div>
+                </div>
                 <!-- Password Validation Messages -->
                 <div
                     *ngIf="password.invalid && password.touched"

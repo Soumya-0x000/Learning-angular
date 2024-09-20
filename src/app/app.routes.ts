@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
         path: 'login',
         loadComponent: () =>
@@ -22,7 +23,7 @@ export const routes: Routes = [
                 (mod) => mod.HomeComponent
             ),
     },
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
+
     {
         path: '404',
         loadComponent: () =>
