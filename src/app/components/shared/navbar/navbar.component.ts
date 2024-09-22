@@ -1,7 +1,7 @@
 import { TabViewModule } from 'primeng/tabview';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { navbarType } from '../models/navbarType';
 
 @Component({
@@ -14,11 +14,17 @@ import { navbarType } from '../models/navbarType';
 export class NavbarComponent {
     tabs: navbarType[] = [];
 
+    constructor(private route: Router) {}
+
     ngOnInit() {
         this.tabs = [
-            { title: 'Home', path: '/home' },
-            { title: 'SignUp', path: '/signup' },
-            { title: 'LogIn', path: '/login' },
+            { title: 'Home', path: '/home', icon: 'pi pi-home' },
+            { title: 'SignUp', path: '/signup', icon: 'pi pi-user-plus' },
+            { title: 'LogIn', path: '/login', icon: 'pi pi-sign-in' },
         ];
+    }
+
+    activeRoute(path: string): boolean {
+        return this.route.url === path;
     }
 }
