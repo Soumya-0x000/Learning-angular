@@ -7,7 +7,6 @@ import {
     Validators,
 } from '@angular/forms';
 import { SignupFormType } from '../../shared/models/signupType';
-import { Router } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 
 @Component({
@@ -18,11 +17,16 @@ import { AuthService } from '../../../service/auth.service';
     styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
-    constructor( private authServ: AuthService) {}
+    constructor(private authServ: AuthService) {}
 
     formFields: SignupFormType[] = [];
     signupForm!: FormGroup;
     isPswdVisible: boolean = false;
+    isSubmitting: boolean = false;
+    isPasswordVisible: boolean = false;
+    isConfirmPasswordVisible: boolean = false;
+    focusField: { [key: string]: boolean } = {};
+    isLottieLoading: boolean = true;
 
     ngOnInit(): void {
         this.formFields = [
@@ -43,6 +47,14 @@ export class SignupComponent implements OnInit {
                 type: 'password',
                 label: 'Password',
                 validators: [Validators.required, Validators.minLength(6)],
+                icon: 'password',
+            },
+            {
+                name: 'confirmPassword',
+                type: 'password',
+                label: 'Confirm Password',
+                validators: [Validators.required, Validators.minLength(6)],
+                icon: 'confirmPassword',
             },
         ];
 
@@ -55,9 +67,30 @@ export class SignupComponent implements OnInit {
     }
 
     signup() {
+        this.isSubmitting = true;
         this.authServ.registerUser(
             this.signupForm.value.email,
             this.signupForm.value.password
         );
+    }
+
+    togglePasswordVisibility() {
+        this.isPasswordVisible = !this.isPasswordVisible;
+    }
+
+    toggleConfirmPasswordVisibility() {
+        this.isConfirmPasswordVisible = !this.isConfirmPasswordVisible;
+    }
+
+    handleFocus(field: string) {
+        this.focusField[field] = true;
+    }
+
+    handleBlur(field: string) {
+        this.focusField[field] = false;
+    }
+
+    onLottieLoad() {
+        this.isLottieLoading = false;
     }
 }

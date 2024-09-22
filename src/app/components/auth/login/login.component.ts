@@ -11,23 +11,35 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class LoginComponent {
     isPswdVisible: boolean = false;
-    
-    email = new FormControl("", [
-        Validators.required,
-        Validators.email,
-    ]);
-
-    password = new FormControl("", [
-        Validators.required,
-        Validators.minLength(6),
-    ]);
+    isSubmitting: boolean = false;
+    focusField: { [key: string]: boolean } = {};
+    isLottieLoading: boolean = true;
 
     loginForm = new FormGroup({
-        email: this.email,
-        password: this.password,
+        email: new FormControl('', [Validators.required, Validators.email]),
+        password: new FormControl('', [
+            Validators.required,
+            Validators.minLength(6),
+        ]),
     });
 
     login() {
         console.log(this.loginForm.value);
+    }
+
+    togglePasswordVisibility() {
+        this.isPswdVisible = !this.isPswdVisible;
+    }
+
+    handleFocus(field: string) {
+        this.focusField[field] = true;
+    }
+
+    handleBlur(field: string) {
+        this.focusField[field] = false;
+    }
+
+    onLottieLoad() {
+        this.isLottieLoading = false;
     }
 }

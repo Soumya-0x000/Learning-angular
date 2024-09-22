@@ -1,102 +1,173 @@
-<div class="flex flex-col items-center justify-center h-full w-full">
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div class="mb-4">
-            <h2 class="text-2xl font-bold text-gray-800">LogIn</h2>
-        </div>
+<div class="h-full flex items-center justify-center">
+    <div
+        class="flex w-fit p-2 rounded-lg justify-center gap-x-3 lg:gap-x-16 bg-gradient-to-tl to-slate-700 ring-1 ring-slate-800"
+    >
+        <div class="flex">
+            <form
+                [formGroup]="loginForm"
+                (ngSubmit)="login()"
+                class="bg-gradient-to-br from-[#201d32] to-[#082030] rounded-md p-5 w-[22rem] lsm:w-[26rem] lg:w-[25rem]"
+            >
+                <h1
+                    class="text-slate-400 text-center font-onest tracking-wider font-bold text-2xl mb-12"
+                >
+                    Sign In
+                </h1>
 
-        <!-- Form with formGroup directive binding -->
-        <form
-            [formGroup]="loginForm"
-            class="space-y-4"
-            (ngSubmit)="login()"
-            class="w-[20rem] space-y-5"
-        >
-            <!-- Email Field -->
-            <div class="form-group">
-                <label
-                    for="email"
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    >Email</label
-                >
-                <input
-                    type="email"
-                    id="email"
-                    formControlName="email"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                />
-                <!-- Email Validation Messages -->
-                <div
-                    *ngIf="email.invalid && email.touched"
-                    class="text-red-500 text-xs italic"
-                >
-                    <div *ngIf="email.hasError('required')">
-                        Email is required
-                    </div>
-                    <div *ngIf="email.hasError('email')">
-                        Please enter a valid email address
-                    </div>
-                </div>
-            </div>
+                <div class="grid gap-10">
+                    <!-- Email Input Field -->
+                    <div class="form-group relative">
+                        <input
+                            type="email"
+                            formControlName="email"
+                            id="email"
+                            (focus)="handleFocus('email')"
+                            (blur)="handleBlur('email')"
+                            class="w-full bg-slate-950 pl-3 pr-10 text-slate-300 border-none outline-none rounded-lg border-[1px] py-3.5"
+                            [ngClass]="{
+                                'ring-1 ring-cyan-600':
+                                    focusField['email'] ||
+                                    loginForm.get('email')?.value,
+                                'ring-1 ring-slate-800': !focusField['email']
+                            }"
+                        />
 
-            <!-- Password Field -->
-            <div class="form-group">
-                <label
-                    for="password"
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    >Password</label
-                >
-                <div class="relative">
-                    <input
-                        [type]="isPswdVisible ? 'text' : 'password'"
-                        id="password"
-                        formControlName="password"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                    <div
-                        class="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-sm"
-                        (click)="isPswdVisible = !isPswdVisible"
-                    >
-                        <i
-                            class="pi"
-                            [ngClass]="
-                                isPswdVisible ? 'pi-eye' : 'pi-eye-slash'
+                        <label
+                            for="email"
+                            class="absolute left-4 text-[15px] transition-all"
+                            [ngClass]="{
+                                'left-2 -top-[1.2rem] text-xs font-bold font-montserrat text-slate-300':
+                                    focusField['email'] ||
+                                    loginForm.get('email')?.value,
+                                'top-1/2 -translate-y-1/2 text-slate-400':
+                                    !focusField['email'] &&
+                                    !loginForm.get('email')?.value
+                            }"
+                            >Email</label
+                        >
+
+                        <div
+                            *ngIf="
+                                loginForm.get('email')?.invalid &&
+                                loginForm.get('email')?.touched
                             "
-                        ></i>
+                            class="text-red-500 text-sm absolute -bottom-[1.1rem] right-2"
+                        >
+                            {{
+                                loginForm.get("email")?.hasError("email")
+                                    ? "Invalid email address"
+                                    : "Email is required"
+                            }}
+                        </div>
                     </div>
-                </div>
-                <!-- Password Validation Messages -->
-                <div
-                    *ngIf="password.invalid && password.touched"
-                    class="text-red-500 text-xs italic"
-                >
-                    <div *ngIf="password.hasError('required')">
-                        Password is required
-                    </div>
-                    <div *ngIf="password.hasError('minlength')">
-                        Password must be at least 6 characters long
-                    </div>
-                </div>
-            </div>
 
-            <!-- Submit Button and Forgot Password Link -->
-            <div class="flex items-center justify-between">
-                <button
-                    type="submit"
-                    [disabled]="loginForm.invalid"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    <!-- Password Input Field -->
+                    <div class="form-group relative">
+                        <input
+                            [type]="isPswdVisible ? 'text' : 'password'"
+                            formControlName="password"
+                            id="password"
+                            (focus)="handleFocus('password')"
+                            (blur)="handleBlur('password')"
+                            class="w-full bg-slate-950 pl-3 pr-10 text-slate-300 border-none outline-none rounded-lg border-[1px] py-3.5"
+                            [ngClass]="{
+                                'ring-1 ring-cyan-600':
+                                    focusField['password'] ||
+                                    loginForm.get('password')?.value,
+                                'ring-1 ring-slate-800': !focusField['password']
+                            }"
+                        />
+
+                        <label
+                            for="password"
+                            class="absolute left-4 text-[15px] transition-all"
+                            [ngClass]="{
+                                'left-2 -top-[1.2rem] text-xs font-bold font-montserrat text-slate-300':
+                                    focusField['password'] ||
+                                    loginForm.get('password')?.value,
+                                'top-1/2 -translate-y-1/2 text-slate-400':
+                                    !focusField['password'] &&
+                                    !loginForm.get('password')?.value
+                            }"
+                            >Password</label
+                        >
+
+                        <span
+                            (click)="togglePasswordVisibility()"
+                            class="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-black"
+                        >
+                            <i
+                                class="pi text-slate-400"
+                                [ngClass]="
+                                    isPswdVisible ? 'pi-unlock' : 'pi-lock'
+                                "
+                            ></i>
+                        </span>
+
+                        <div
+                            *ngIf="
+                                loginForm.get('password')?.invalid &&
+                                loginForm.get('password')?.touched
+                            "
+                            class="text-red-500 text-sm absolute -bottom-[1.1rem] right-2"
+                        >
+                            {{
+                                loginForm.get("password")?.hasError("minlength")
+                                    ? "Password must be at least 6 characters"
+                                    : "Password is required"
+                            }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex items-center justify-between mt-14 gap-x-16">
+                    <button
+                        type="submit"
+                        [disabled]="loginForm.invalid"
+                        class="flex items-center justify-center gap-x-2 py-2 rounded-lg bg-[#244164] hover:ring-1 transition-all text-slate-300 w-1/2"
+                    >
+                        LogIn
+                        <div
+                            *ngIf="isSubmitting"
+                            class="ml-2 animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+                        ></div>
+                    </button>
+
+                    <button
+                        type="reset"
+                        [disabled]="loginForm.invalid"
+                        class="flex items-center justify-center gap-x-2 py-2 rounded-lg bg-[#244164] hover:ring-1 transition-all text-slate-300 w-1/2"
+                    >
+                        Reset
+                        <div
+                            *ngIf="isSubmitting"
+                            class="ml-2 animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+                        ></div>
+                    </button>
+                </div>
+            </form>
+
+            <div class="w-[20rem] lg:w-[30rem] h-full hidden md:block">
+                <!-- Spinner while Lottie is loading -->
+                <div
+                    *ngIf="isLottieLoading"
+                    class="hidden md:flex items-center justify-center h-full"
                 >
-                    Login
-                </button>
-                <button
-                    type="reset"
-                    [disabled]="loginForm.invalid"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
-                    Reset
-                </button>
+                    <span
+                        style="border-top-color: transparent"
+                        class="aspect-square h-10 border-4 border-blue-200 rounded-full animate-spin"
+                    ></span>
+                </div>
+
+                <!-- Lottie Iframe -->
+                <iframe
+                    src="https://lottie.host/embed/aacfed6c-8090-48f4-b636-dcf3b9387b9f/TIUiD67yCc.json"
+                    class="pr-1 w-full h-full"
+                    [class.hidden]="isLottieLoading"
+                    (load)="onLottieLoad()"
+                ></iframe>
             </div>
-        </form>
+        </div>
     </div>
 </div>

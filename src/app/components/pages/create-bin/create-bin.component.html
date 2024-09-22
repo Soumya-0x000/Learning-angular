@@ -23,13 +23,13 @@
                             type="text"
                             [id]="item.name + i"
                             [formControlName]="item.name"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            class="shadow appearance-none border border-slate-700 bg-slate-800 text-slate-300 rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-cyan-600"
                             required
                             [attr.required]="item.validators ? 'required' : ''"
                         />
                         <label
                             [for]="item.name"
-                            class="block text-gray-700 text-sm font-mono mb-2"
+                            class="block text-slate-400 text-sm font-mono mb-2"
                         >
                             {{ item.label }}
                         </label>
@@ -46,7 +46,7 @@
                                 [id]="item.name + i"
                                 type="text"
                                 [formControlName]="item.name"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                class="shadow appearance-none border border-slate-700 bg-slate-800 text-slate-300 rounded w-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-cyan-600"
                                 [ngClass]="{'font-mono text-sm': item.name === 'code'}"
                                 required
                                 [rows]="item.name === 'code' ? 8 : 3"
@@ -56,7 +56,7 @@
                             ></textarea>
                             <label
                                 [for]="item.name"
-                                class="block text-gray-700 text-sm font-mono mb-2"
+                                class="block text-slate-400 text-sm font-mono mb-2"
                             >
                                 {{ item.label }}
                             </label>
@@ -65,24 +65,28 @@
 
                     <!-- Validation Messages -->
                     <div
-                    *ngIf="
-                        binForm.get(item.name)?.invalid &&
-                        binForm.get(item.name)?.touched
-                    "
-                    class="text-red-500 text-xs italic absolute -bottom-4"
-                >
-                    <div *ngIf="binForm.get(item.name)?.hasError('required')">
-                        {{ item.label }} is required
+                        *ngIf="
+                            binForm.get(item.name)?.invalid &&
+                            binForm.get(item.name)?.touched
+                        "
+                        class="text-red-500 text-xs italic absolute -bottom-4"
+                    >
+                        <div *ngIf="binForm.get(item.name)?.hasError('required')">
+                            {{ item.label }} is required
+                        </div>
+                        <div *ngIf="binForm.get(item.name)?.hasError('minlength')">
+                            {{ item.label }} must be at least
+                            {{
+                                binForm.get(item.name)?.errors?.[
+                                    'minlength'
+                                ].requiredLength
+                            }}
+                            characters long
+                        </div>
+                        <div *ngIf="binForm.get(item.name)?.hasError('email')">
+                            Please enter a valid email address
+                        </div>
                     </div>
-                    <div *ngIf="binForm.get(item.name)?.hasError('minlength')">
-                        {{ item.label }} must be at least
-                        {{ binForm.get(item.name)?.errors?.['minlength'].requiredLength }}
-                        characters long
-                    </div>
-                    <div *ngIf="binForm.get(item.name)?.hasError('email')">
-                        Please enter a valid email address
-                    </div>
-                </div>
                 </p-floatLabel>
             </div>
         </div>
@@ -92,14 +96,14 @@
             <button
                 type="submit"
                 [disabled]="binForm.invalid"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-cyan-600"
             >
                 Save
             </button>
             <button
                 type="reset"
                 [disabled]="binForm.invalid"
-                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-cyan-600"
             >
                 Reset
             </button>

@@ -5,4 +5,5 @@ export interface SignupFormType {
     type: string;
     label: string;
     validators: ((control: AbstractControl) => ValidationErrors | null)[];
+    icon?: string;
 }

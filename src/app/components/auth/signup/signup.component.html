@@ -1,97 +1,163 @@
-<div class="flex flex-col items-center justify-center h-full w-full">
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div class="mb-4">
-            <h2 class="text-2xl font-bold text-gray-800">SignUp</h2>
-        </div>
-
-        <!-- Form with formGroup directive binding -->
-        <form
-            [formGroup]="signupForm"
-            class="space-y-4"
-            (ngSubmit)="signup()"
-            class="w-[20rem] space-y-5"
-        >
-            <!-- name Field -->
-            <div
-                class="form-group"
-                *ngFor="let item of formFields; let i = index"
-                [id]="i"
+<div class="h-full flex items-center justify-center">
+    <div
+        class="flex w-fit p-2 rounded-lg justify-center gap-x-3 lg:gap-x-16 bg-gradient-to-tl to-slate-700 ring-1 ring-slate-800"
+    >
+        <div class="flex gap-x-14">
+            <form
+                [formGroup]="signupForm"
+                (ngSubmit)="signup()"
+                class="bg-gradient-to-br from-[#201d32] to-[#082030] rounded-md p-5 w-[22rem] lsm:w-[26rem] lg:w-[31rem]"
             >
-                <label
-                    [for]="item.name"
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    >{{ item.label }}</label
+                <h1
+                    class="text-slate-400 text-center font-onest tracking-wider font-bold text-2xl mb-12"
                 >
-                <div class="relative">
-                    <input
-                        [type]="
-                            item.name === 'password'
-                                ? isPswdVisible
-                                    ? 'text'
-                                    : 'password'
-                                : item.type
-                        "
-                        [id]="item.name + i"
-                        [formControlName]="item.name"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                        [attr.required]="item.validators ? 'required' : ''"
-                    />
+                    Register
+                </h1>
+
+                <div class="grid gap-10">
+                    <!-- Iterate over the fields array to generate input fields -->
                     <div
-                        class="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-sm"
-                        *ngIf="item.name === 'password'"
-                        (click)="isPswdVisible = !isPswdVisible"
+                        *ngFor="let field of formFields"
+                        class="form-group relative"
                     >
-                        <i
-                            class="pi"
-                            [ngClass]="isPswdVisible ? 'pi-eye' : 'pi-eye-slash'"
-                        ></i>
+                        <input
+                            [type]="
+                                field.icon === 'password'
+                                    ? isPasswordVisible
+                                        ? 'text'
+                                        : 'password'
+                                    : field.icon === 'confirmPassword'
+                                    ? isConfirmPasswordVisible
+                                        ? 'text'
+                                        : 'password'
+                                    : field.type
+                            "
+                            formControlName="{{ field.name }}"
+                            id="{{ field.name }}"
+                            (focus)="handleFocus(field.name)"
+                            (blur)="handleBlur(field.name)"
+                            class="w-full bg-slate-950 pl-3 pr-10 text-slate-300 border-none outline-none rounded-lg border-[1px] py-3.5"
+                            [ngClass]="{
+                                'ring-1 ring-cyan-600':
+                                    focusField[field.name] ||
+                                    signupForm.get(field.name)?.value,
+                                'ring-1 ring-slate-800': !focusField[field.name]
+                            }"
+                        />
+
+                        <label
+                            for="{{ field.name }}"
+                            class="absolute left-4 text-[15px] transition-all"
+                            [ngClass]="{
+                                'left-2 -top-[1.2rem] text-xs font-bold font-montserrat text-slate-300':
+                                    focusField[field.name] ||
+                                    signupForm.get(field.name)?.value,
+                                'top-1/2 -translate-y-1/2 text-slate-400':
+                                    !focusField[field.name] &&
+                                    !signupForm.get(field.name)?.value
+                            }"
+                        >
+                            {{ field.label }}
+                        </label>
+
+                        <!-- Toggle password visibility -->
+                        <span
+                            *ngIf="
+                                field.icon === 'password' ||
+                                field.icon === 'confirmPassword'
+                            "
+                            (click)="
+                                field.icon === 'password'
+                                    ? togglePasswordVisibility()
+                                    : toggleConfirmPasswordVisibility()
+                            "
+                            class="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-black"
+                        >
+                            <i
+                                class="pi text-slate-400"
+                                [ngClass]="
+                                    field.icon === 'password'
+                                        ? isPasswordVisible
+                                            ? 'pi-unlock'
+                                            : 'pi-lock'
+                                        : isConfirmPasswordVisible
+                                        ? 'pi-unlock'
+                                        : 'pi-lock'
+                                "
+                            ></i>
+                        </span>
+
+                        <div
+                            *ngIf="
+                                signupForm.get(field.name)?.invalid &&
+                                signupForm.get(field.name)?.touched
+                            "
+                            class="text-red-500 text-sm absolute -bottom-[1.1rem] right-2"
+                        >
+                            {{
+                                field.name === "email"
+                                    ? signupForm.get("email")?.hasError("email")
+                                        ? "Invalid email address"
+                                        : "Email is required"
+                                    : field.name === "password"
+                                    ? signupForm
+                                          .get("password")
+                                          ?.hasError("minlength")
+                                        ? "Password must be at least 6 characters"
+                                        : "Password is required"
+                                    : "Field is required"
+                            }}
+                        </div>
                     </div>
                 </div>
 
-                <!-- Validation Messages -->
+                <div class="flex items-center justify-between mt-14 gap-x-16">
+                    <button
+                        type="submit"
+                        [disabled]="signupForm.invalid"
+                        class="flex items-center justify-center gap-x-2 py-2 rounded-lg bg-[#244164] hover:ring-1 transition-all text-slate-300 w-1/2"
+                    >
+                        Register
+                        <div
+                            *ngIf="isSubmitting"
+                            class="ml-2 animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+                        ></div>
+                    </button>
+
+                    <button
+                        type="reset"
+                        [disabled]="signupForm.invalid"
+                        class="flex items-center justify-center gap-x-2 py-2 rounded-lg bg-[#244164] hover:ring-1 transition-all text-slate-300 w-1/2"
+                    >
+                        Reset
+                        <div
+                            *ngIf="isSubmitting"
+                            class="ml-2 animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+                        ></div>
+                    </button>
+                </div>
+            </form>
+
+            <div class="w-[20rem] lg:w-[28rem] h-full hidden md:block">
+                <!-- Spinner while Lottie is loading -->
                 <div
-                    *ngIf="
-                        signupForm.get(item.name)?.invalid &&
-                        signupForm.get(item.name)?.touched
-                    "
-                    class="text-red-500 text-xs italic"
+                    *ngIf="isLottieLoading"
+                    class="hidden md:flex items-center justify-center h-full"
                 >
-                    <div
-                        *ngIf="signupForm.get(item.name)?.hasError('required')"
-                    >
-                        {{ item.label }} is required
-                    </div>
-                    <div
-                        *ngIf="signupForm.get(item.name)?.hasError('minlength')"
-                    >
-                        {{ item.label }} must be at least
-                        {{ signupForm.get(item.name)?.errors?.['minlength'].requiredLength }}
-                        characters long
-                    </div>
-                    <div *ngIf="signupForm.get(item.name)?.hasError('email')">
-                        Please enter a valid email address
-                    </div>
+                    <span
+                        style="border-top-color: transparent"
+                        class="aspect-square h-10 border-4 border-blue-200 rounded-full animate-spin"
+                    ></span>
                 </div>
-            </div>
 
-            <!-- Submit Button and Forgot Password Link -->
-            <div class="flex items-center justify-between">
-                <button
-                    type="submit"
-                    [disabled]="signupForm.invalid"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
-                    Signup
-                </button>
-                <button
-                    type="reset"
-                    [disabled]="signupForm.invalid"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
-                    Reset
-                </button>
+                <!-- Lottie Iframe -->
+                <iframe
+                    src="https://lottie.host/embed/db689947-eadf-4366-8580-774883f23e7f/pRnRZ8YKSx.json"
+                    class="pr-1 w-full h-full"
+                    [class.hidden]="isLottieLoading"
+                    (load)="onLottieLoad()"
+                ></iframe>
             </div>
-        </form>
+        </div>
     </div>
 </div>

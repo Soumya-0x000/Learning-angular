@@ -1,15 +1,35 @@
 <div class="w-full h-full px-14">
     <div class="w-full h-full flex items-center justify-center">
-        <div class="text-3xl font-bold font-lato bg-gradient-to-br from-orange-200 via-indigo-300 to-green-300 text-transparent bg-clip-text grid grid-rows-6">
-            <span class=" w-fit h-fit">Code your wildest dreams into reality. </span>
+        <div
+            class="text-3xl font-bold font-lato bg-gradient-to-br from-orange-200 via-indigo-300 to-green-300 text-transparent bg-clip-text grid grid-rows-6"
+        >
+            <span class="w-fit h-fit"
+                >Code your wildest dreams into reality.
+            </span>
             <span> Faster than you ever thought possible. </span>
             <span>With CodeBin, your imagination is the only limit. </span>
         </div>
 
-        <iframe
-            src="https://lottie.host/embed/a04877a4-8308-4113-aecf-1f0816267833/Toho1x1T8f.json"
-            class="min-w-[40rem] min-h-[30rem] border-none outline-none"
-        ></iframe>
+        <div class="min-w-[40rem] w-[40rem] min-h-[30rem] h-[30rem]">
+            <!-- Spinner while Lottie is loading -->
+            <div
+                *ngIf="isLottieLoading"
+                class="hidden md:flex items-center justify-center h-full w-full"
+            >
+                <span
+                    style="border-top-color: transparent"
+                    class="aspect-square h-10 border-4 border-blue-200 rounded-full animate-spin"
+                ></span>
+            </div>
+
+            <!-- Lottie Iframe -->
+            <iframe
+                src="https://lottie.host/embed/a04877a4-8308-4113-aecf-1f0816267833/Toho1x1T8f.json"
+                class="min-w-full min-h-full border-none outline-none"
+                [class.hidden]="isLottieLoading"
+                (load)="onLottieLoad()"
+            ></iframe>
+        </div>
     </div>
 
     <button
@@ -24,6 +44,7 @@
         [modal]="true"
         [(visible)]="isCodebinOpen"
         [style]="{ width: '38rem' }"
+        [contentStyle]="{ 'background-color': '#1e293b', color: '#e2e8f0' }"
     >
         <app-create-bin
             (saveCodeEmitter)="saveEmittedCode($event)"
